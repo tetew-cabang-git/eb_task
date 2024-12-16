@@ -1,9 +1,14 @@
-import 'package:eb_task/screen/login_screen.dart';
-import 'package:eb_task/main_screen.dart';
-import 'package:eb_task/screen/register_screen.dart';
+import 'package:eb_task/screen/profile/edit_avatar_screen.dart';
+import 'package:eb_task/screen/profile/edit_password_screen.dart';
+import 'package:eb_task/screen/onboarding/login_screen.dart';
+import 'package:eb_task/screen/main_screen.dart';
+import 'package:eb_task/screen/onboarding/register_screen.dart';
+import 'package:eb_task/screen/profile/update_email_screen.dart';
+import 'package:eb_task/screen/profile/update_name_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart'; // File ini di-generate oleh Firebase CLI
 
@@ -28,13 +33,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Task Manager',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+      ),
       home: FirebaseAuth.instance.currentUser == null
           ? const LoginScreen()
           : const MainScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/update_name': (context) => const UpdateNameScreen(),
+        '/update_email': (context) => const UpdateEmailScreen(),
+        '/edit_password': (context) => const EditPasswordScreen(),
+        '/edit_avatar': (context) => const EditAvatarScreen(),
       },
     );
   }

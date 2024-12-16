@@ -1,6 +1,6 @@
-import 'package:eb_task/screen/add_task_screen.dart';
-import 'package:eb_task/screen/profile_screen.dart';
-import 'package:eb_task/screen/task_screen.dart';
+import 'package:eb_task/screen/home/add_task_screen.dart';
+import 'package:eb_task/screen/home/profile_screen.dart';
+import 'package:eb_task/screen/home/task_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
