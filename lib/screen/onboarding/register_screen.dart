@@ -1,3 +1,4 @@
+import 'package:eb_task/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -96,71 +97,107 @@ class _RegisterScreenState extends State<RegisterScreen> {
               key: _formKey,
               child: ListView(
                 children: [
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(labelText: "Username"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Username tidak boleh kosong";
-                      }
-                      return null;
-                    },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(labelText: "Username"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Username tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _firstNameController,
-                    decoration: const InputDecoration(labelText: "First Name"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "First Name tidak boleh kosong";
-                      }
-                      return null;
-                    },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: _firstNameController,
+                      decoration:
+                          const InputDecoration(labelText: "First Name"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "First Name tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _lastNameController,
-                    decoration: const InputDecoration(labelText: "Last Name"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Last Name tidak boleh kosong";
-                      }
-                      return null;
-                    },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: _lastNameController,
+                      decoration: const InputDecoration(labelText: "Last Name"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Last Name tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: "Email"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Email tidak boleh kosong";
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return "Masukkan email yang valid";
-                      }
-                      return null;
-                    },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(labelText: "Email"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email tidak boleh kosong";
+                        }
+                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          return "Masukkan email yang valid";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: "Password"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Password tidak boleh kosong";
-                      }
-                      return null;
-                    },
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(labelText: "Password"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Password tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   const SizedBox(height: 32),
                   _isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
+                      : AppButton.btnRegular(
                           onPressed: _register,
-                          child: const Text("Register"),
+                          txtLabel: const Text("Register"),
                         ),
                 ],
               ),
