@@ -58,7 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Profil")),
+      appBar: AppBar(
+        title: const Text("Profile"),
+        backgroundColor: Colors.purple[100],
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -112,43 +115,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _profileData?['avatar'] != null
-                          ? NetworkImage(_profileData!['avatar'])
-                          : const AssetImage('assets/default_avatar.png')
-                              as ImageProvider,
+          ? Stack(children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/bg.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              const Center(child: CircularProgressIndicator())
+            ])
+          : Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/bg.png'),
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "Username: ${_profileData?['username'] ?? 'Tidak tersedia'}",
-                    style: const TextStyle(fontSize: 18),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _profileData?['avatar'] != null
+                              ? NetworkImage(_profileData!['avatar'])
+                              : const AssetImage('assets/default_avatar.png')
+                                  as ImageProvider,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "Username: ${_profileData?['username'] ?? 'Tidak tersedia'}",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "First Name: ${_profileData?['first_name'] ?? 'Tidak tersedia'}",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Last Name: ${_profileData?['last_name'] ?? 'Tidak tersedia'}",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Email: ${_profileData?['email'] ?? 'Tidak tersedia'}",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "First Name: ${_profileData?['first_name'] ?? 'Tidak tersedia'}",
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Last Name: ${_profileData?['last_name'] ?? 'Tidak tersedia'}",
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Email: ${_profileData?['email'] ?? 'Tidak tersedia'}",
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
     );
   }
