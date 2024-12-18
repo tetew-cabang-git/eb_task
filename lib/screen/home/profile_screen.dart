@@ -61,120 +61,119 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text("Profile"),
         backgroundColor: Colors.purple[100],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                _profileData?['username'] ?? 'Pengguna',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Update Avatar"),
-              onTap: () {
-                Navigator.pushNamed(context, '/edit_avatar');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Update First Name & Last Name"),
-              onTap: () {
-                Navigator.pushNamed(context, '/update_name');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.email),
-              title: const Text("Update Email"),
-              onTap: () {
-                Navigator.pushNamed(context, '/update_email');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.lock),
-              title: const Text("Edit Password"),
-              onTap: () {
-                Navigator.pushNamed(context, '/edit_password');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text("Log Out"),
-              onTap: _logOut,
-            ),
-          ],
-        ),
+        elevation: 0,
       ),
       body: _isLoading
-          ? Stack(children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/bg.png'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              const Center(child: CircularProgressIndicator())
-            ])
+          ? const Center(child: CircularProgressIndicator())
           : Stack(
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/bg.png'),
-                      fit: BoxFit.fill,
+                    gradient: LinearGradient(
+                      colors: [Colors.purple, Colors.pinkAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: _profileData?['avatar'] != null
-                              ? NetworkImage(_profileData!['avatar'])
-                              : const AssetImage('assets/default_avatar.png')
-                                  as ImageProvider,
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+                        Center(
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage: _profileData?['avatar'] != null
+                                ? NetworkImage(_profileData!['avatar'])
+                                : const AssetImage('assets/default_avatar.png')
+                                    as ImageProvider,
+                            backgroundColor: Colors.white,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Username: ${_profileData?['username'] ?? 'Tidak tersedia'}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "First Name: ${_profileData?['first_name'] ?? 'Tidak tersedia'}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Last Name: ${_profileData?['last_name'] ?? 'Tidak tersedia'}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Email: ${_profileData?['email'] ?? 'Tidak tersedia'}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        Text(
+                          _profileData?['username'] ?? 'Tidak tersedia',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _profileData?['email'] ?? 'Tidak tersedia',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                        const Divider(
+                          color: Colors.white70,
+                          height: 40,
+                          thickness: 1,
+                        ),
+                        ProfileDetailCard(
+                          title: "First Name",
+                          value:
+                              _profileData?['first_name'] ?? 'Tidak tersedia',
+                        ),
+                        ProfileDetailCard(
+                          title: "Last Name",
+                          value: _profileData?['last_name'] ?? 'Tidak tersedia',
+                        ),
+                        ProfileDetailCard(
+                          title: "Email",
+                          value: _profileData?['email'] ?? 'Tidak tersedia',
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: _logOut,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: const Icon(Icons.logout),
+                          label: const Text("Log Out"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
+    );
+  }
+}
+
+class ProfileDetailCard extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const ProfileDetailCard({required this.title, required this.value, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 5,
+      child: ListTile(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          value,
+          style: const TextStyle(fontSize: 14, color: Colors.black54),
+        ),
+        leading: const Icon(Icons.info_outline, color: Colors.purple),
+      ),
     );
   }
 }

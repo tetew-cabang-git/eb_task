@@ -93,6 +93,24 @@ class _TaskScreenState extends State<TaskScreen> {
     }
   }
 
+  Future<void> _undoTask(int taskId) async {
+    try {
+      await _supabase
+          .from('task')
+          .update({'is_done': false}) // Set is_done menjadi true
+          .eq('id', taskId); // Filter berdasarkan task ID
+
+      _fetchTasks(); // Refresh daftar tugas
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Task berhasil diselesaikan!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal menyelesaikan task: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -322,13 +340,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                           ),
                                           trailing: Radio<bool>(
                                             value: true,
-                                            groupValue: task['is_done'] == true
-                                                ? true
-                                                : null, // Checked jika done
+                                            groupValue: task[
+                                                'is_done'], // Menggunakan nilai `is_done` sebagai grup
                                             onChanged: (value) {
-                                              if (task['is_done'] != true) {
+                                              if (task['is_done'] == true) {
+                                                _undoTask(task[
+                                                    'id']); // Jika sudah selesai, ubah ke undone
+                                              } else {
                                                 _markTaskAsDone(task[
-                                                    'id']); // Tandai task sebagai selesai
+                                                    'id']); // Jika belum selesai, ubah ke done
                                               }
                                             },
                                           ),

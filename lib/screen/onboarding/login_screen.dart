@@ -32,13 +32,25 @@ class LoginScreen extends StatelessWidget {
       // Login dengan Google
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        // User batal login
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login dibatalkan oleh pengguna.')),
+        );
         return;
       }
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
+      // Validasi token Google
+      if (googleAuth.idToken == null || googleAuth.accessToken == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Google Sign-In gagal mendapatkan token.')),
+        );
+        return;
+      }
+
+      // Kredensial Firebase
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -56,17 +68,20 @@ class LoginScreen extends StatelessWidget {
         final String displayName = firebaseUser.displayName ?? 'Anonymous';
         final String avatarUrl = firebaseUser.photoURL ?? '';
 
-        // Cek apakah user sudah ada di Supabase
+        // Supabase: cek atau tambahkan user
         final supabase = Supabase.instance.client;
-        final response =
-            await supabase.from('user').select().eq('email', email).single();
+        final response = await supabase
+            .from('user')
+            .select()
+            .eq('email', email)
+            .maybeSingle();
 
-        if (response.isNotEmpty) {
-          // Jika tidak ditemukan, tambahkan ke Supabase
+        if (response == null || response.isEmpty) {
+          // Tambahkan user ke Supabase jika belum ada
           await supabase.from('user').insert({
-            'id': uid, // Gunakan Firebase UID sebagai user ID
+            'id': uid,
             'email': email,
-            'username': email.split('@')[0], // Default username
+            'username': email.split('@')[0],
             'first_name': displayName.split(' ').first,
             'last_name': displayName.split(' ').length > 1
                 ? displayName.split(' ').last
@@ -75,11 +90,14 @@ class LoginScreen extends StatelessWidget {
           });
         }
 
-        // Arahkan ke halaman utama
+        // Navigasi ke halaman utama
         Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        throw FirebaseAuthException(
+            code: 'null-user', message: 'Pengguna tidak ditemukan.');
       }
     } catch (e, stacktrace) {
-      // Tampilkan error
+      // Tampilkan error untuk debugging
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login gagal: ${e.toString()}')),
       );
